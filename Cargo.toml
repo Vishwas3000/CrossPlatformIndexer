@@ -3,4 +3,5 @@ resolver = "2"
 members = [
     "shared_core",
     "apps/flutter_app/rust_builder",
+    "apps/flutter_app/rust",
 ]
