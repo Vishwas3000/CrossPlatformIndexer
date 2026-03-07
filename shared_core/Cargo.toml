@@ -3,7 +3,12 @@ name = "shared_core"
 version = "0.1.0"
 edition = "2024"
 
+[features]
+default = []
+flutter = ["dep:flutter_rust_bridge"]
+
 [lib]
 crate-type = ["lib", "staticlib", "cdylib"]
 
 [dependencies]
+flutter_rust_bridge = { version = "=2.11.1", optional = true }
