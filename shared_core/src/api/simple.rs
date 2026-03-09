@@ -2,7 +2,6 @@ use std::thread;
 use std::time::Duration as StdDuration;
 use tokio::time::{sleep, Duration as TokioDuration};
 
-#[cfg_attr(feature = "flutter", flutter_rust_bridge::frb(sync))]
 pub fn greet(name: String) -> String {
     format!("Hello from Rust, {}!", name)
 }

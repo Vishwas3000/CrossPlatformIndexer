@@ -12,16 +12,31 @@ pub enum IndexStatus {
     Failed { error: String },
 }
 
+pub struct FileEntry {
+    pub path: String,
+    pub is_dir: bool,
+    pub size_bytes: u64,
+    pub modified_ms: u64,
+}
+
 // Conversions
 impl From<shared_core::api::types::FileInfo> for FileInfo {
     fn from(f: shared_core::api::types::FileInfo) -> Self {
-        Self { name: f.name, size_bytes: f.size_bytes, tags: f.tags }
+        Self {
+            name: f.name,
+            size_bytes: f.size_bytes,
+            tags: f.tags,
+        }
     }
 }
 
 impl From<FileInfo> for shared_core::api::types::FileInfo {
     fn from(f: FileInfo) -> Self {
-        Self { name: f.name, size_bytes: f.size_bytes, tags: f.tags }
+        Self {
+            name: f.name,
+            size_bytes: f.size_bytes,
+            tags: f.tags,
+        }
     }
 }
 
@@ -29,8 +44,12 @@ impl From<shared_core::api::types::IndexStatus> for IndexStatus {
     fn from(s: shared_core::api::types::IndexStatus) -> Self {
         match s {
             shared_core::api::types::IndexStatus::Pending => Self::Pending,
-            shared_core::api::types::IndexStatus::Processing { progress } => Self::Processing { progress },
-            shared_core::api::types::IndexStatus::Complete { chunk_count } => Self::Complete { chunk_count },
+            shared_core::api::types::IndexStatus::Processing { progress } => {
+                Self::Processing { progress }
+            }
+            shared_core::api::types::IndexStatus::Complete { chunk_count } => {
+                Self::Complete { chunk_count }
+            }
             shared_core::api::types::IndexStatus::Failed { error } => Self::Failed { error },
         }
     }
