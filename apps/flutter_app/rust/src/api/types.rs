@@ -70,3 +70,4 @@ pub fn get_mock_status() -> IndexStatus {
 pub fn process_file_info(info: FileInfo) -> String {
     shared_core::api::types::process_file_info(info.into())
 }
+

@@ -19,6 +19,34 @@ IndexStatus getMockStatus() =>
 String processFileInfo({required FileInfo info}) =>
     RustLib.instance.api.crateApiTypesProcessFileInfo(info: info);
 
+class FileEntry {
+  final String path;
+  final bool isDir;
+  final BigInt sizeBytes;
+  final BigInt modifiedMs;
+
+  const FileEntry({
+    required this.path,
+    required this.isDir,
+    required this.sizeBytes,
+    required this.modifiedMs,
+  });
+
+  @override
+  int get hashCode =>
+      path.hashCode ^ isDir.hashCode ^ sizeBytes.hashCode ^ modifiedMs.hashCode;
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is FileEntry &&
+          runtimeType == other.runtimeType &&
+          path == other.path &&
+          isDir == other.isDir &&
+          sizeBytes == other.sizeBytes &&
+          modifiedMs == other.modifiedMs;
+}
+
 class FileInfo {
   final String name;
   final BigInt sizeBytes;
@@ -48,13 +76,10 @@ sealed class IndexStatus with _$IndexStatus {
   const IndexStatus._();
 
   const factory IndexStatus.pending() = IndexStatus_Pending;
-  const factory IndexStatus.processing({
-    required double progress,
-  }) = IndexStatus_Processing;
-  const factory IndexStatus.complete({
-    required int chunkCount,
-  }) = IndexStatus_Complete;
-  const factory IndexStatus.failed({
-    required String error,
-  }) = IndexStatus_Failed;
+  const factory IndexStatus.processing({required double progress}) =
+      IndexStatus_Processing;
+  const factory IndexStatus.complete({required int chunkCount}) =
+      IndexStatus_Complete;
+  const factory IndexStatus.failed({required String error}) =
+      IndexStatus_Failed;
 }

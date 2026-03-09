@@ -3,6 +3,7 @@ import 'package:flutter_app/src/rust/api/simple.dart';
 import 'package:flutter_app/src/rust/frb_generated.dart';
 import 'package:flutter_app/src/rust/api/types.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:flutter_app/src/rust/api/fs.dart';
 
 Future<void> main() async {
   await RustLib.init();
@@ -161,12 +162,25 @@ class _TestScreenState extends State<TestScreen> {
 
                 try {
                   final dir = await getApplicationDocumentsDirectory();
+                  final entries = listDirectory(dirPath: dir.path);
 
                   setState(() {
-                    
+                    isRustWorking = false;
+                    if (entries.isEmpty) {
+                      fsResult = 'Directory is empty: ${dir.path}';
+                    } else {
+                      final previews = entries
+                          .take(5)
+                          .map((e) => '${e.isDir ? '📁' : '📄'} ${e.path.split('/').last} (${e.sizeBytes} bytes)')
+                          .join('\n');
+                      fsResult = 'Found ${entries.length} items in ${dir.path}:\n$previews';
+                    }
                   });
-                } catch {
-                  
+                } catch (e) {
+                  setState(() {
+                    isRustWorking = false;
+                    fsResult = 'Error: $e';
+                  });
                 }
               },
             ),
